@@ -1,0 +1,8 @@
+1.) Finalize front and rear geometry 
+2.) Get parallelized optimize geometry code working 
+3.) Get transient_response optimization working.
+4.) Sanity check the configuration
+5.) Check aligning torque and anti pitch, anti squat characteristics 
+6.) Get turn in optimization into geometry code 
+7.) Package everything nicely
+
