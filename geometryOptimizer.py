@@ -119,7 +119,7 @@ if __name__ == "__main__":
     geometryObj.get_optimal_geometry(tireDataPath, suspensionCSVFilePath, tirePressureCriteria, FZmin, FZmax, wheelRate, optIterations, front_or_rear)
 
     #--------------------- Set File Parameters ------------------------
-    FILE_PATH = "/Users/linda/Documents/PRE/Suspension-Dynamics-Simulator-master/Xerxes/Python"
+    FILE_PATH = "/Users/linda/Documents/PRE/Suspension-Dynamics-master/Xerxes/Suspension-Simulator-Master"
     FILE = 'A1965run18.csv'
     tireClient = tireFit(FILE_PATH+'/'+FILE)
     #------------------- Get Tire Fit Parameters ----------------------

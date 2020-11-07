@@ -66,11 +66,10 @@ class base(object):
             else:
                 x_interp = self.get_linear_range(x, rangeCrit)
             y_interp = map(f, x_interp)
-            return x_interp, y_interp
-
+            return x_interp, list(y_interp)
         else:
             y_fit = map(f, x)
-            return x, y_fit
+            return x, list(y_fit)
 
     # calculate mu
     def get_mu(self, df):
