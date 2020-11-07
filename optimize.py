@@ -34,11 +34,11 @@ class optimize(base):
             kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(x)),self.convert_kinematic_state_to_pointDict(x)))
         
         # distribute process using multithreading to speed up
-        guesses = [self.induce_perturbations(initialParamGuess, bnds) for attempt in range(0, iterations)]
+        guesses = [self.induce_perturbations(initialParamGuess, bnds) for attempt in range(0, iterations)] # was originally ParamGuess
 
         results = []
         for guess in guesses:
-            res = sciOptimize.minimize(fun, paramGuess, method='TNC', bounds=bnds, tol=1e-8) 
+            res = sciOptimize.minimize(fun, initialParamGuess, method='TNC', bounds=bnds, tol=1e-8)
             squaredError = self.calculate_squared_error(optimalCambers, 
             kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(res.x)))
             results.append(res)
