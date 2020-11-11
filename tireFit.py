@@ -29,7 +29,7 @@ class tireFit(base):
     def getMaxMu_OptimalCamber_vs_NormalForce(self, pressureCriteria, binSize):
         filteredData = self.filter_data(self.df, pressureCriteria)
         muSeries = self.get_mu(filteredData)
-        filteredData['MU'] = muSeries
+        filteredData.loc[:, 'MU'] = muSeries
         df = filteredData.sort_values('FZ')
 
         maxMu = []

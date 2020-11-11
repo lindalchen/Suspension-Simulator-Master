@@ -11,10 +11,11 @@
 
 import scipy.optimize as sciOptimize
 import csv
-import random 
+import random
 
 from base import base
 from kinematics import kinematics
+
 
 class optimize(base):
     def __init__(self):
@@ -39,15 +40,16 @@ class optimize(base):
         results = []
         for guess in guesses:
             res = sciOptimize.minimize(fun, initialParamGuess, method='TNC', bounds=bnds, tol=1e-8)
-            squaredError = self.calculate_squared_error(optimalCambers, 
-            kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(res.x)))
+            squaredError = self.calculate_squared_error(optimalCambers,
+            kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(res.x)), res.x)
             results.append(res)
 
         globalOptimum = []
-        minSquaredError = float('inf') 
+        minSquaredError = float('inf')
         for res in results:
-            squaredError = self.calculate_squared_error(optimalCambers, 
-            kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(res.x)))
+            squaredError = self.calculate_squared_error(optimalCambers,
+            kinematicsObj.get_cambers(displacements, front_or_rear,
+            self.convert_kinematic_state_to_pointDict(res.x)))
             print(res.x)
             print('TOTAL SQUARED ERROR: %f \n' % squaredError)
             if squaredError < minSquaredError:
