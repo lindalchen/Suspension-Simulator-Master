@@ -102,13 +102,15 @@ class geometryOptimizer(optimize):
         zRange = max(displacements) - min(displacements)
         deltaZ = zRange/len(displacements)
 
-        suspensionPoints = self.optimize_geometry(optimalCambers, displacements, suspensionCSVFilePath, zRange, 
+        suspensionPoints = self.optimize_geometry(optimalCambers, displacements, suspensionCSVFilePath, zRange,
             deltaZ, startingVals, bounds, numIterations, front_or_rear)
+
+        return suspensionPoints
     #------------------------- END OPTIMIZE FUNCTIONS ---------------------------
 
 if __name__ == "__main__":
     tireDataPath = 'A1965run18.csv'
-    suspensionCSVFilePath = 'suspension_points_2019.csv'
+    suspensionCSVFilePath = 'suspension_points_2020.csv'
     tirePressureCriteria = ['P', 9.5, 10.5]
     FZmin = -200     #lb
     FZmax = 0
@@ -119,57 +121,57 @@ if __name__ == "__main__":
     geometryObj.get_optimal_geometry(tireDataPath, suspensionCSVFilePath, tirePressureCriteria, FZmin, FZmax, wheelRate, optIterations, front_or_rear)
 
     #--------------------- Set File Parameters ------------------------
-    FILE_PATH = "/Users/linda/Documents/PRE/Suspension-Dynamics-master/Xerxes/Suspension-Simulator-Master"
-    FILE = 'A1965run18.csv'
-    tireClient = tireFit(FILE_PATH+'/'+FILE)
+    # FILE_PATH = "/Users/linda/Documents/PRE/Suspension-Dynamics-master/Xerxes/Suspension-Simulator-Master"
+    # FILE = 'A1965run18.csv'
+    # tireClient = tireFit(FILE_PATH+'/'+FILE)
     #------------------- Get Tire Fit Parameters ----------------------
-    PRESSURE_CRITERIA = ['P', 9.5, 10.5]
-    mus, cambers, normals = tireClient.getMaxMu_OptimalCamber_vs_NormalForce(PRESSURE_CRITERIA, 200)
-    normal_fit, optimalCamber_fit = tireClient.fit_poly(normals, cambers, 3, True, [-300,0,3000])
+    # PRESSURE_CRITERIA = ['P', 9.5, 10.5]
+    # mus, cambers, normals = tireClient.getMaxMu_OptimalCamber_vs_NormalForce(PRESSURE_CRITERIA, 200)
+    # normal_fit, optimalCamber_fit = tireClient.fit_poly(normals, cambers, 3, True, [-300,0,3000])
     #------------- Get Optimal Suspension Fit Parameters --------------
-    FRONT_WHEEL_RATE = 390  #lb/in
-    REAR_WHEEL_RATE = 585   #lb/in
-    FZ_MIN = -200           #lb
-    FZ_MAX = 0              #lb
+    # FRONT_WHEEL_RATE = 390  #lb/in
+    # REAR_WHEEL_RATE = 585   #lb/in
+    # FZ_MIN = -200           #lb
+    # FZ_MAX = 0              #lb
 
-    geometryClient = geometryOptimizer()
-    displacements_front, optimalCambers_front = geometryClient.get_optimal_camber_displacement_curve(FRONT_WHEEL_RATE, 
-            FZ_MIN, FZ_MAX, normal_fit, optimalCamber_fit)
-    displacements_rear, optimalCambers_rear = geometryClient.get_optimal_camber_displacement_curve(REAR_WHEEL_RATE, 
-            FZ_MIN, FZ_MAX, normal_fit, optimalCamber_fit)
+    # geometryClient = geometryOptimizer()
+    # displacements_front, optimalCambers_front = geometryClient.get_optimal_camber_displacement_curve(FRONT_WHEEL_RATE,
+            # FZ_MIN, FZ_MAX, normal_fit, optimalCamber_fit)
+    # displacements_rear, optimalCambers_rear = geometryClient.get_optimal_camber_displacement_curve(REAR_WHEEL_RATE,
+            # FZ_MIN, FZ_MAX, normal_fit, optimalCamber_fit)
     
     #-------- Get Real Suspension Fit Parameters and Optimized ----------
-    suspensionStateBase = base().read_suspension_csv('suspension_points_2019.csv')
-    suspensionStateOptimized = base().read_suspension_csv('suspension_points_2019_opt1.csv')
+    # suspensionStateBase = base().read_suspension_csv('suspension_points_2019.csv')
+    # suspensionStateOptimized = base().read_suspension_csv('suspension_points_2019_opt1.csv')
     
-    kinematicsObj = kinematics()
-    baseCambers_front = kinematicsObj.get_cambers(displacements_front, 'FRONT', suspensionStateBase)
-    optimizedCambers_front = kinematicsObj.get_cambers(displacements_front, 'FRONT', suspensionStateOptimized)
-    baseCambers_rear = kinematicsObj.get_cambers(displacements_rear, 'REAR', suspensionStateBase)
-    optimizedCambers_rear = kinematicsObj.get_cambers(displacements_rear, 'REAR', suspensionStateOptimized)
+    # kinematicsObj = kinematics()
+    # baseCambers_front = kinematicsObj.get_cambers(displacements_front, 'FRONT', suspensionStateBase)
+    # optimizedCambers_front = kinematicsObj.get_cambers(displacements_front, 'FRONT', suspensionStateOptimized)
+    # baseCambers_rear = kinematicsObj.get_cambers(displacements_rear, 'REAR', suspensionStateBase)
+    # optimizedCambers_rear = kinematicsObj.get_cambers(displacements_rear, 'REAR', suspensionStateOptimized)
 
-    import matplotlib.pyplot as plt
-    fig = plt.figure(figsize=plt.figaspect(0.3))
+    # import matplotlib.pyplot as plt
+    # fig = plt.figure(figsize=plt.figaspect(0.3))
 
-    ax = fig.add_subplot(1,2,1)
-    ax.plot(displacements_front, optimizedCambers_front, label='optimized')
-    ax.plot(displacements_front, optimalCambers_front, label='optimal')
-    ax.plot(displacements_front, baseCambers_front, label='base')
-    ax.legend()
-    ax.set_title('Front Suspension: Camber vs. Displacement [Wheel Rate 390 lb/in]')
-    ax.set_xlabel('Displacement', fontsize=10)
-    ax.set_ylabel('Camber', fontsize=10)
+    # x = fig.add_subplot(1,2,1)
+    # ax.plot(displacements_front, optimizedCambers_front, label='optimized')
+    # ax.plot(displacements_front, optimalCambers_front, label='optimal')
+    # ax.plot(displacements_front, baseCambers_front, label='base')
+    # ax.legend()
+    # ax.set_title('Front Suspension: Camber vs. Displacement [Wheel Rate 390 lb/in]')
+    # ax.set_xlabel('Displacement', fontsize=10)
+    # ax.set_ylabel('Camber', fontsize=10)
 
-    ax = fig.add_subplot(1,2,2)
-    ax.plot(displacements_rear, optimizedCambers_rear, label='optimized')
-    ax.plot(displacements_rear, optimalCambers_rear, label='optimal')
-    ax.plot(displacements_rear, baseCambers_rear, label='base')
-    ax.legend()
-    ax.set_title('Rear Suspension: Camber vs. Displacement [Wheel Rate 585 lb/in]')
-    ax.set_xlabel('Displacement', fontsize=10)
-    ax.set_ylabel('Camber', fontsize=10)
+    # ax = fig.add_subplot(1,2,2)
+    # ax.plot(displacements_rear, optimizedCambers_rear, label='optimized')
+    # ax.plot(displacements_rear, optimalCambers_rear, label='optimal')
+    # ax.plot(displacements_rear, baseCambers_rear, label='base')
+    # ax.legend()
+    # ax.set_title('Rear Suspension: Camber vs. Displacement [Wheel Rate 585 lb/in]')
+    # ax.set_xlabel('Displacement', fontsize=10)
+    # ax.set_ylabel('Camber', fontsize=10)
     
-    plt.show()
+    # plt.show()
     #------------------------- Plot Curves -----------------------------
     # import pandas as pd
     # from plot import plot 

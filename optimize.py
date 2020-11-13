@@ -29,27 +29,34 @@ class optimize(base):
         suspensionState = self.read_suspension_csv(suspensionCSVFile)
         actualCambers = kinematicsObj.get_cambers(displacements, front_or_rear, suspensionState)
 
+        for i in range(len(bnds)):
+            if ((initialParamGuess[i] > bnds[i][1]) | (initialParamGuess[i] < bnds[i][0])):
+                print(i)
+
         assert(len(optimalCambers) == len(actualCambers)), 'ERROR: Lists must be the same length'
 
         fun = lambda x: (self.calculate_squared_error(optimalCambers, 
-            kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(x)),self.convert_kinematic_state_to_pointDict(x)))
+            kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(x)),
+                                                      self.convert_kinematic_state_to_pointDict(x)))
         
         # distribute process using multithreading to speed up
         guesses = [self.induce_perturbations(initialParamGuess, bnds) for attempt in range(0, iterations)] # was originally ParamGuess
 
         results = []
+
         for guess in guesses:
-            res = sciOptimize.minimize(fun, initialParamGuess, method='TNC', bounds=bnds, tol=1e-8)
+            res = sciOptimize.minimize(fun, guess, method='TNC', bounds=bnds, tol=1e-8) #guess was initialparamguess
             squaredError = self.calculate_squared_error(optimalCambers,
             kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(res.x)), res.x)
             results.append(res)
 
         globalOptimum = []
         minSquaredError = float('inf')
+
         for res in results:
             squaredError = self.calculate_squared_error(optimalCambers,
             kinematicsObj.get_cambers(displacements, front_or_rear,
-            self.convert_kinematic_state_to_pointDict(res.x)))
+            self.convert_kinematic_state_to_pointDict(res.x)), res.x)
             print(res.x)
             print('TOTAL SQUARED ERROR: %f \n' % squaredError)
             if squaredError < minSquaredError:
