@@ -132,7 +132,7 @@ if __name__ == "__main__":
     # FRONT_WHEEL_RATE = 390  #lb/in
     # REAR_WHEEL_RATE = 585   #lb/in
     # FZ_MIN = -200           #lb
-    # FZ_MAX = 0              #lb
+    # FZ_MAX = 0              #lb lol
 
     # geometryClient = geometryOptimizer()
     # displacements_front, optimalCambers_front = geometryClient.get_optimal_camber_displacement_curve(FRONT_WHEEL_RATE,
