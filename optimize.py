@@ -12,9 +12,11 @@
 import scipy.optimize as sciOptimize
 import csv
 import random
+import joblib
 
 from base import base
 from kinematics import kinematics
+from joblib import Parallel, delayed
 
 
 class optimize(base):
@@ -41,7 +43,6 @@ class optimize(base):
         
         # distribute process using multithreading to speed up
         guesses = [self.induce_perturbations(initialParamGuess, bnds) for attempt in range(0, iterations)] # was originally ParamGuess
-
         results = []
 
         for guess in guesses:

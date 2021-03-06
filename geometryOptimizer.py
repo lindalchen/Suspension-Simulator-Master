@@ -86,7 +86,7 @@ class geometryOptimizer(optimize):
         return tuple(paramList)
 
     # optimize geometry based on tire data and suspension parameters
-    def get_optimal_geometry(self, tireDataPath, suspensionCSVFilePath, tirePressureCriteria, 
+    def get_optimal_geometry(self, tireDataPath , suspensionCSVFilePath, tirePressureCriteria,
             FZmin, FZmax, wheelRate, numIterations, front_or_rear):
         # get optimal mu-camber curve based on tire data
         tireClient = tireFit(tireDataPath)
