@@ -23,7 +23,8 @@ class geometryOptimizer(optimize):
         pass
 
     #--------------------------- CAMBER FUNCTIONS ----------------------------
-    # returns resting camber based on static resting force on car 
+    # returns resting camber based on static resting force on car
+    # this function is not used lol
     def get_optimal_resting_camber(self, normalForceList, optimalCamberList, restingForce):
         assert (restingForce <= max(normalForceList) and restingForce >= min(normalForceList)), "INVALID: Resting Force outside force range"
         assert(len(normalForceList) == len(optimalCamberList)), "INVALID: Lists differ in length"
@@ -52,13 +53,17 @@ class geometryOptimizer(optimize):
         return displacements, optimalCambers
 
     # return average camber gain versus displacements. Camber gain negative for increasing (more negative) camber from rest.
+    # this is also not being used in the code
+    # relative change in camber so (camber at load - resting camber) and taking the average of that
     def get_optimal_camberGain_displacement_curve(self, displacements, optimalCambers, restingCamber):
         assert (restingCamber < max(optimalCambers) and restingCamber > min(optimalCambers)), "INVALID: Resting camber outside camber range"
         assert(len(displacements) == len(optimalCambers)), "INVALID: Lists differ in length"
 
         return displacements, list(map(lambda x: x-restingCamber, optimalCambers))
 
-    # returns average camber gain 
+    # returns average camber gain
+    # this is just average camber gain, but we don't know with respect to what forces
+    # i think the code above it is better?
     def get_average_camber_gain(self, camberList):
         return sum(camberList)/float(len(camberList))
 
@@ -91,9 +96,11 @@ class geometryOptimizer(optimize):
         # get optimal mu-camber curve based on tire data
         tireClient = tireFit(tireDataPath)
         mus, cambers, normals = tireClient.getMaxMu_OptimalCamber_vs_NormalForce(tirePressureCriteria, 200)
+        # produces the fitted polynomial points of the camber curve with respect to normal
+        # normal_fit is a ndarray with info about it and the array, while optimialCamber_fit is an array
         normal_fit, optimalCamber_fit = tireClient.fit_poly(normals, cambers, 3, True, [FZmin,FZmax, abs(FZmin-FZmax)*100])
 
-        # get displacement camber curve 
+        # get displacement camber curve
         displacements, optimalCambers = self.get_optimal_camber_displacement_curve(wheelRate, 
             FZmin, FZmax, normal_fit, optimalCamber_fit)
 
@@ -102,6 +109,7 @@ class geometryOptimizer(optimize):
         zRange = max(displacements) - min(displacements)
         deltaZ = zRange/len(displacements)
 
+        # optimize geometry is in optimize.py
         suspensionPoints = self.optimize_geometry(optimalCambers, displacements, suspensionCSVFilePath, zRange,
             deltaZ, startingVals, bounds, numIterations, front_or_rear)
 
@@ -115,7 +123,7 @@ if __name__ == "__main__":
     FZmin = -200     #lb
     FZmax = 0
     wheelRate = 585  #lb/in
-    optIterations = 100
+    optIterations = 1
     front_or_rear = 'REAR'
     geometryObj = geometryOptimizer()
     geometryObj.get_optimal_geometry(tireDataPath, suspensionCSVFilePath, tirePressureCriteria, FZmin, FZmax, wheelRate, optIterations, front_or_rear)

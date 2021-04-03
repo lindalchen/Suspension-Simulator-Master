@@ -37,7 +37,7 @@ class optimize(base):
 
         assert(len(optimalCambers) == len(actualCambers)), 'ERROR: Lists must be the same length'
 
-        fun = lambda x: (self.calculate_squared_error(optimalCambers, 
+        fun = lambda x: (self.calculate_squared_error(optimalCambers,
             kinematicsObj.get_cambers(displacements, front_or_rear, self.convert_kinematic_state_to_pointDict(x)),
                                                       self.convert_kinematic_state_to_pointDict(x)))
         
